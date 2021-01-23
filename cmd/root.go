@@ -18,8 +18,11 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
+	"time"
 
+	"github.com/bogem/id3v2"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -28,7 +31,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "chapter2txt",
+	Use:   "ced",
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
@@ -38,7 +41,33 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	RunE: func(cmd *cobra.Command, args []string) error {
+		path, err := homedir.Expand(args[0])
+		if err != nil {
+			return err
+		}
+		tag, err := id3v2.Open(path, id3v2.Options{Parse: true})
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer tag.Close()
+
+		for _, frame := range tag.GetFrames("CHAP") {
+			cf := frame.(id3v2.ChapterFrame)
+			st := cf.StartTime
+			st = st.Round(time.Second)
+			h := st / time.Hour
+			st -= h * time.Hour
+			m := st / time.Minute
+			st -= m * time.Minute
+			s := st / time.Second
+
+			fmt.Printf("%02d:%02d:%02d %s\n", h, m, s, cf.Title.Text)
+
+		}
+
+		return nil
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -57,7 +86,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.chapter2txt.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ced.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -77,9 +106,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".chapter2txt" (without extension).
+		// Search config in home directory with name ".ced" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".chapter2txt")
+		viper.SetConfigName(".ced")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

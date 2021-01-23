@@ -1,2 +1,2 @@
 build:
-	go build -o bin/chapter2txt .
+	go build -o bin/ced .

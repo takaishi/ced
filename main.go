@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/takaishi/chapter2txt/cmd"
+import "github.com/takaishi/ced/cmd"
 
 func main() {
 	cmd.Execute()
