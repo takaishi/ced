@@ -28,9 +28,11 @@ changelog:
       - '^docs:'
       - '^test:'
 brews:
-  - github:
+  - name: ced
+    tap:
       owner: takaishi
       name: homebrew-fomulas
+      token: "{{ .Env.GORELEASER_TOKEN }}"
     commit_author:
       name: goreleaserbot
       email: goreleaser@carlosbecker.com
