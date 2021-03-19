@@ -11,12 +11,12 @@ builds:
       - CGO_ENABLED=0
     ldflags:
       -X github.com/takaishi/ced/config.Version={{.Version}}
-archive:
-  replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    amd64: x86_64
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -27,16 +27,16 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
-brew:
-  github:
-    owner: takaishi
-    name: homebrew-fomulas
-  commit_author:
-    name: goreleaserbot
-    email: goreleaser@carlosbecker.com
-  description: "CLI tool to generate chapters from mp3 file"
-  homepage: "https://github.com/takaishi/ced"
-  install: |
-    bin.install Dir['ced']
-  test: |
-    system "#{bin}/ced"
+brews:
+  - github:
+      owner: takaishi
+      name: homebrew-fomulas
+    commit_author:
+      name: goreleaserbot
+      email: goreleaser@carlosbecker.com
+    description: "CLI tool to generate chapters from mp3 file"
+    homepage: "https://github.com/takaishi/ced"
+    install: |
+      bin.install Dir['ced']
+    test: |
+      system "#{bin}/ced"
