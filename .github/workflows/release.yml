@@ -25,4 +25,4 @@ jobs:
         with:
           args: release
         env:
-          GITHUB_TOKEN: ${{secrets.GORELEASER_TOKEN}}
+          GORELEASER_TOKEN: ${{secrets.GORELEASER_TOKEN}}
