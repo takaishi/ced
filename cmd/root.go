@@ -22,8 +22,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/bogem/id3v2"
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/bogem/id3v2/v2"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
